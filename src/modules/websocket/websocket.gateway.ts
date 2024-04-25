@@ -66,12 +66,6 @@ export class WebsocketGateway
       // console.log('Received message:', message);
       try {
         const msg = JSON.parse(message.toString('utf-8'));
-        // 在这里处理消息，比如将消息广播给所有客户端
-        // this.server.clients.forEach((client) => {
-        //   if (client.readyState === WebSocket.OPEN) {
-        //     client.send(message);
-        //   }
-        // });
         const {
           type,
           body,
@@ -79,7 +73,6 @@ export class WebsocketGateway
         } = msg;
         const controller = new AbortController();
         let finishResut: string = '';
-        // const audioString = isAudio ? `希望你说的话尽量简洁明了。` : '';
         switch (type) {
           case 'message': {
             body.messages = [
