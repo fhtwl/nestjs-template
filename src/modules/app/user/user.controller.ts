@@ -7,7 +7,7 @@ import { AppUserListDto } from './dto/list.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AppUserQueryDto } from './dto/query.dto';
 import { User } from './user.entity';
-import { ApiRes } from 'src/common/decorator/api-res.decorator';
+import { ApiRes, ApiStringRes } from 'src/common/decorator/api-res.decorator';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { UserScope } from 'src/constants/common.constants';
 import { EditAppUserInfoDto } from './dto/edit-info.dto';
@@ -71,6 +71,18 @@ export class AppUserController {
     const { uid } = request.auth;
     return {
       data: await this.userService.getUserDetail(uid),
+    };
+  }
+
+  @Get('/refreshToken')
+  @ApiOperation({
+    summary: '刷新token',
+  })
+  @ApiStringRes()
+  refreshToken(@Req() request) {
+    const { uid, scope } = request.auth;
+    return {
+      data: this.userService.refreshToken({ uid, scope }),
     };
   }
 }

@@ -7,10 +7,11 @@ import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AppUserListDto } from './dto/list.dto';
-import { PagingResponse } from 'src/constants/common.constants';
+import { PagingResponse, UserScope } from 'src/constants/common.constants';
 import { EditAppUserDto } from './dto/edit.dto';
 import { EditAppUserInfoDto } from './dto/edit-info.dto';
 import { AddAppUserDto } from './dto/add.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AppUserService {
@@ -21,6 +22,7 @@ export class AppUserService {
     private configService: ConfigService,
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAll(params: AppUserListDto): Promise<PagingResponse<User>> {
@@ -72,6 +74,10 @@ export class AppUserService {
       })
       .where('id = :id', { id })
       .execute();
+  }
+
+  refreshToken(user: { uid: number; scope: UserScope }) {
+    return this.jwtService.sign(user);
   }
 
   async update(user: EditAppUserDto): Promise<User> {
