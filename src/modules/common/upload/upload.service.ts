@@ -71,7 +71,7 @@ export class UploadService {
             resolve([
               {
                 ...respBody,
-                key: `/uploads/${name}`,
+                key: `https://static.fhtwl.cc/uploads/${name}`,
                 name,
                 oldName: file.originalname,
               },
