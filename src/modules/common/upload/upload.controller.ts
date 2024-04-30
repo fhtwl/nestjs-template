@@ -15,13 +15,18 @@ import {
 import { FileNameEncodePipe } from 'src/common/pipes/file.name.encode.pipe';
 import { ApiTags } from '@nestjs/swagger';
 import { QiniuService } from 'src/external-services/qiniu.service';
+import { MinioService } from 'src/external-services/minio.service';
+import configuration from 'src/config/configuration';
 // import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('公共文件上传模块')
 @Controller('common/upload')
 @UsePipes(new FileNameEncodePipe())
 export class UploadController {
-  constructor(private readonly qiniuService: QiniuService) {}
+  constructor(
+    private readonly qiniuService: QiniuService,
+    private readonly minioService: MinioService,
+  ) {}
 
   // // 单文件上传
   // @Post('/file')
@@ -52,9 +57,15 @@ export class UploadController {
   // @Post('upload')
   @UseInterceptors(FilesInterceptor('file'))
   async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return {
-      data: await this.qiniuService.upload(files[0]),
-    };
+    if (configuration().minio.accessKey) {
+      return {
+        data: await this.minioService.upload(files[0]),
+      };
+    } else {
+      return {
+        data: await this.qiniuService.upload(files[0]),
+      };
+    }
   }
 
   // // 上传多个文件（全部使用不同的键）

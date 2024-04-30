@@ -49,4 +49,12 @@ export default () => ({
     from: process.env.EMAIL_FROM,
   },
   aiKey: process.env.AI_KEY,
+  minio: {
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+    bucket: process.env.MINIO_BUCKET,
+    endPoint: process.env.MINIO_END_POINT,
+    port: Number(process.env.MINIO_PORT) || 9000,
+    bucketName: process.env.MINIO_BUCKET_NAME,
+  },
 });

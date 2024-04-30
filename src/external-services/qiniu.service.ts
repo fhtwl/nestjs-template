@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import qiniu from 'qiniu';
 // import formidable from 'formidable';
 import configuration from 'src/config/configuration';
-export interface RespBody {
+export interface FileRes {
   key: string;
   hash: string;
   size: number;
@@ -43,7 +43,7 @@ export class QiniuService {
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     return putPolicy.uploadToken(mac);
   }
-  upload(file: Express.Multer.File): Promise<RespBody[]> {
+  upload(file: Express.Multer.File): Promise<FileRes[]> {
     return new Promise((resolve, reject) => {
       const config: qiniu.conf.Config = new qiniu.conf.Config({
         useHttpsDomain: true, // 是否使用https域名
@@ -86,11 +86,11 @@ export class QiniuService {
     });
   }
 
-  uploadList(files: Express.Multer.File[]): Promise<RespBody[]> {
+  uploadList(files: Express.Multer.File[]): Promise<FileRes[]> {
     return new Promise((resolve, reject) => {
       Promise.all(files.map((item) => this.upload(item)))
         .then((res) => {
-          const list: RespBody[] = [];
+          const list: FileRes[] = [];
           res.map((item) => {
             list.push(...item);
           });
