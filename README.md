@@ -27,7 +27,7 @@
 │   ├── tasks （定时任务）
 │   │   ├── tasks.module.ts
 │   │   └── tasks.service.ts
-│   └── templates （页面模板）
+│   └── external-services （外部服务）
 ├── test （单元测试）
 │   ├── app.e2e-spec.ts
 ├── tsconfig.json
